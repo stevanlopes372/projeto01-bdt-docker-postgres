@@ -1,2 +1,7 @@
 .venv/
 .env
+
+# Ignorar arquivos gerados pelo dbt
+logs/
+target/
+dbt_packages/

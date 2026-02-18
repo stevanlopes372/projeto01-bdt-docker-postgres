@@ -1,22 +1,28 @@
-# usando versão bitnami
-version: '3.8'
-
 services:
   postgresql:
-	# 15 é muito mais estavel que a 18 (que nem lancou oficialmente)
-    image: docker.io/bitnami/postgresql:15 
+    image: postgres:15-alpine 
     ports:
       - '5432:5432'
     volumes:
-      # Lado esquerdo (você inventa) : Lado direito (a Bitnami obriga)
-      - 'projeto01:/bitnami/postgresql'
+      - 'projeto01_postgres_etlComDbt:/var/lib/postgresql/data'
     environment:
-      # Puxando as credenciais do seu arquivo .env
-      - POSTGRESQL_USERNAME=${POSTGRES_USER}
-      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRESQL_DATABASE=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+  dbt:
+    build: ./dbt_banco
+    depends_on:
+      - postgresql
+    volumes:
+      - ./dbt_banco:/usr/app/dbt_project
+    environment:
+      - DB_HOST=postgresql
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
 
 # O registro obrigatorio do lado esquerdo
 volumes:
-  dados_do_meu_banco:
+  projeto01_postgres_etlComDbt:
     driver: local
