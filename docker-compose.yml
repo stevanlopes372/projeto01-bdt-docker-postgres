@@ -1,25 +1,22 @@
+# usando versão bitnami
+version: '3.8'
+
 services:
-
-  db:
-    image: postgres:14.21-alpine
-    restart: always
-    # set shared memory limit when using docker compose
-    shm_size: 1gb
-    #volumes:
-    #  - type: tmpfs
-    #    target: /dev/shm
-    #    tmpfs:
-    #      size: 134217728 # 128*2^20 bytes = 128Mb
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-
-      
-      POSTGRES_PASSWORD: example
-
-  adminer:
-    image: adminer
-    restart: always
+  postgresql:
+		# 15 é muito mais estavel que a 18 (que nem lancou oficialmente)
+    image: docker.io/bitnami/postgresql:15 
     ports:
-      - 8080:8080
+      - '5432:5432'
+    volumes:
+      # Lado esquerdo (você inventa) : Lado direito (a Bitnami obriga)
+      - 'projeto01:/bitnami/postgresql'
+    environment:
+      # Puxando as credenciais do seu arquivo .env
+      - POSTGRESQL_USERNAME=${POSTGRES_USER}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESQL_DATABASE=${POSTGRES_DB}
+
+# O registro obrigatorio do lado esquerdo
+volumes:
+  dados_do_meu_banco:
+    driver: local
