@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   postgresql:
-		# 15 é muito mais estavel que a 18 (que nem lancou oficialmente)
+	# 15 é muito mais estavel que a 18 (que nem lancou oficialmente)
     image: docker.io/bitnami/postgresql:15 
     ports:
       - '5432:5432'
