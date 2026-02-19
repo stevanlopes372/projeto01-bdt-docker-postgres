@@ -28,6 +28,7 @@ services:
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=${POSTGRES_DB}
       - DB_PORT=5432
+      - DB_SCHEMA=${DB_SCHEMA}
 
 volumes:
   projeto01_postgres_etlComDbt:
